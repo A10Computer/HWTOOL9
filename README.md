@@ -43,7 +43,7 @@ Kein Installer, keine Laufzeitumgebung, keine Registry-Einträge.
 
 ---
 
-## ✨ Was wird ausgelesen
+##  Was wird ausgelesen
 
 <table>
 <tr><td width="50%" valign="top">
@@ -99,7 +99,7 @@ Kein Installer, keine Laufzeitumgebung, keine Registry-Einträge.
 
 ---
 
-## 🔐 Zwei Betriebsmodi
+##  Zwei Betriebsmodi
 
 |  | Normalmodus | Admin-Modus |
 |---|---|---|
@@ -116,7 +116,7 @@ von 11,1 s auf 0,3 s gebracht.
 
 ---
 
-## 🔒 Datenschutz
+##  Datenschutz
 
 HWTOOL9 arbeitet vollständig lokal:
 
@@ -132,7 +132,7 @@ HWTOOL9 arbeitet vollständig lokal:
 
 ---
 
-## ⚖️ Haftungsausschluss
+##  Haftungsausschluss
 
 Die Nutzung erfolgt **auf eigene Gefahr**. Es wird keine Gewähr für die
 Vollständigkeit oder Richtigkeit der angezeigten Daten übernommen.
