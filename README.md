@@ -18,9 +18,9 @@
 
 ---
 
-## 📖 Über HWTOOL9
+## 📖 Über HWTOOL9 64bit
 
-HWTOOL9 liest die Hardware- und Systemdaten eines Windows-PCs aus und zeigt sie
+HWTOOL9 liest die Hardware- und Systemdaten eines 64bit Windows-PCs aus und zeigt sie
 in 22 Kategorien an. Es braucht keine Installation, keine Internetverbindung und
 keine Administratorrechte — mit Rechten liefert es allerdings mehr.
 
@@ -99,19 +99,6 @@ Kein Installer, keine Laufzeitumgebung, keine Registry-Einträge.
 
 ---
 
-## 🎛️ Oberfläche
-
-- **22 Kategorien**, jede wird erst beim Anklicken geladen → sofortiger Start
-- **Suche** filtert alle angezeigten Werte
-- **Deutsch und Englisch**, umschaltbar ohne Neuladen
-- **Heller und dunkler Modus**, folgt beim Start der Windows-Einstellung
-- **Export** als PDF, CSV, HTML oder JSON
-- **Kopieren** der aktuellen Kategorie in die Zwischenablage
-- Direktknöpfe zu Geräte-Manager, Datenträgerverwaltung, Autostart-Liste,
-  Diensten, Sound-Einstellungen und Windows Update
-
----
-
 ## 🔐 Zwei Betriebsmodi
 
 |  | Normalmodus | Admin-Modus |
@@ -126,57 +113,6 @@ Rechtepflichtige Abfragen werden im Normalmodus **gar nicht erst versucht** —
 `Win32_Tpm` und `Win32_EncryptableVolume` brauchen ohne Rechte jeweils rund fünf
 Sekunden bis zum „Zugriff verweigert". Das allein hat die Sicherheitskategorie
 von 11,1 s auf 0,3 s gebracht.
-
----
-
-## ⚡ Geschwindigkeit
-
-Alle 22 Kategorien zusammen: **rund 7 Sekunden** (Admin-Modus: 11 s). Keine
-einzelne Kategorie braucht im Normalmodus länger als 1,5 Sekunden.
-
-| Abfrage | Vorher | Jetzt | Wie |
-|---|---:|---:|---|
-| Treiberdaten aller Geräte | 3,36 s | **0,02 s** | Registry statt `Win32_PnPSignedDriver` |
-| CPU-Auslastung | 1,09 s | **0,12 s** | `GetSystemTimes` statt `LoadPercentage` |
-| Windows-Aktivierung | 1,55 s | **0,60 s** | Filter über die Anwendungs-ID |
-| VPN-Verbindungen | 0,50 s | **~0 s** | RAS-Telefonbuch statt `Get-VpnConnection` |
-| Ausstehende Updates | 16,1 s | **entfällt** | Die Online-Suche macht Windows Update selbst — dafür zeigt HWTOOL9 jetzt fehlgeschlagene Updates und die letzte Update-Aktivität aus dem Ereignisprotokoll (3 ms) |
-
-Die alten Abfragen bleiben jeweils als **zweite Prüfung** erhalten, falls der
-schnelle Weg auf einem System nichts liefert.
-
----
-
-## 🛡️ Qualitätssicherung
-
-Ein Werkzeug, das auf fremden Rechnern läuft, muss auch dann funktionieren, wenn
-dort etwas anders oder kaputt ist. Dafür gibt es einen Belastungstest, der die
-Datenquellen gezielt sabotiert und alle 22 Kategorien in beiden Sprachen
-durchrechnet:
-
-| Szenario | Ergebnis |
-|---|:---:|
-| Referenzlauf | ✅ |
-| WMI liefert nichts (beschädigtes Repository) | ✅ |
-| WMI-Provider wirft bei jeder Abfrage | ✅ |
-| WMI liefert Unsinn statt Zahlen | ✅ |
-| Keine SMBIOS-Tabelle (typisch in VMs) | ✅ |
-| PowerShell fehlt oder ist gesperrt | ✅ |
-| Keine der nativen Schnittstellen verfügbar | ✅ |
-| Alles gleichzeitig kaputt | ✅ |
-
-**352 Prüfungen, 0 harte Fehler.** Zusätzlich geprüft: Oberfläche und Export auf
-einem System ganz ohne Datenquellen.
-
-Weitere Vorkehrungen für fremde Systeme:
-
-- **Keine Abhängigkeit von Anzeigesprachen.** WLAN-Daten kommen über die
-  Native-Wifi-API statt über `netsh`, dessen Ausgabe übersetzt ist.
-- **Eine fehlende Spalte kippt keine Abfrage.** Schlägt eine WQL-Abfrage fehl,
-  wird sie automatisch mit `SELECT *` wiederholt.
-- **Jede native Schnittstelle ist optional.** Fehlt eine DLL oder eine erst ab
-  Windows 10 1709 vorhandene Funktion, kommt eine leere Liste statt einer
-  Ausnahme.
 
 ---
 
@@ -209,68 +145,7 @@ zulässig.
 
 ---
 
-## 🧰 Für Entwickler
-
-<details>
-<summary><b>Selbst bauen</b></summary>
-
-```bash
-python -m pip install PySide6 pywin32 pyinstaller
-python make_icon.py
-pyinstaller hwtool9.spec --noconfirm
-```
-
-Ergebnis: `dist/HWTOOL9.exe` — eine Datei, ohne Konsolenfenster, mit Symbol und
-Versionsinformationen.
-
-Direkt aus dem Quelltext starten:
-
-```bash
-python run_hwtool9.py
-```
-
-Kategorien auf der Konsole ausgeben (ohne Oberfläche):
-
-```bash
-python dump.py CPU Speicher --lang EN
-```
-
-Belastungstest ausführen:
-
-```bash
-python robustness_test.py
-```
-
-</details>
-
-<details>
-<summary><b>Aufbau</b></summary>
-
-```
-hwtool9/
-  context.py        Betriebsmodus, Caches, Quellenketten
-  wmi.py            WMI über COM, Namespace-Cache, SELECT-*-Rückfallebene
-  psbridge.py       ein dauerhaft laufender PowerShell-Prozess
-  model.py          Builder / Gruppen / Zeilen
-  i18n.py           DE/EN, aufgelöst erst bei der Anzeige
-  export.py         HTML, PDF (über Qt), CSV, JSON
-  native/           SMBIOS, EDID, NVMe, Bluetooth, WLAN, DisplayConfig …
-  collectors/       die 22 Kategorien
-  gui/              PySide6-Oberfläche
-```
-
-Datenquellen in der Reihenfolge ihrer Verwendung: SMBIOS-Rohtabelle →
-Registry → Win32-APIs → WMI/CIM → PowerShell-Cmdlets. Werte werden
-sprachneutral abgelegt und erst beim Zeichnen übersetzt — dadurch ist der
-Sprachwechsel verzögerungsfrei.
-
-</details>
-
----
-
 <div align="center">
-
-**© 2026 Bjoern Scherf · [alpha10.de](https://alpha10.de) · [GitHub](https://github.com/A10Computer/)**
 
 Kostenlos nutzbar · Benutzung auf eigene Gefahr
 
