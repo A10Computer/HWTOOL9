@@ -12,9 +12,7 @@
 [![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![PySide6](https://img.shields.io/badge/GUI-PySide6-41CD52?style=flat-square&logo=qt&logoColor=white)](https://doc.qt.io/qtforpython/)
 [![Sprachen](https://img.shields.io/badge/Sprachen-DE%20%7C%20EN-blue?style=flat-square)](#-oberfläche)
-[![Kategorien](https://img.shields.io/badge/Kategorien-22-0F6CBD?style=flat-square)](#-was-wird-ausgelesen)
 [![Datenschutz](https://img.shields.io/badge/Daten-bleiben%20lokal-success?style=flat-square&logo=shieldsdotio&logoColor=white)](#-datenschutz)
-[![Robustheit](https://img.shields.io/badge/Belastungstest-8%2F8%20bestanden-success?style=flat-square)](#-qualitätssicherung)
 
 </div>
 
