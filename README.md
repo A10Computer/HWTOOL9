@@ -109,11 +109,6 @@ Kein Installer, keine Laufzeitumgebung, keine Registry-Einträge.
 | TPM-Details, BitLocker, SATA-SMART | Hinweis statt Wert | ✅ |
 | Quellen je Wert | Primärquellen | zusätzliche Gegenprüfungen |
 
-Rechtepflichtige Abfragen werden im Normalmodus **gar nicht erst versucht** —
-`Win32_Tpm` und `Win32_EncryptableVolume` brauchen ohne Rechte jeweils rund fünf
-Sekunden bis zum „Zugriff verweigert". Das allein hat die Sicherheitskategorie
-von 11,1 s auf 0,3 s gebracht.
-
 ---
 
 ##  Datenschutz
